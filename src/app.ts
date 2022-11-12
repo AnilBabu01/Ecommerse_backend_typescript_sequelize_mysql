@@ -3,8 +3,7 @@ import createHttpError from 'http-errors'
 import error_handler from './handler/error_handler'
 import { sequelize } from './config/db';
 import cors from 'cors';
-
-
+import { router as auth_router } from './routes/auth';
 const PORT = process.env.PORT || 5000;
 
 const app = express();
@@ -15,13 +14,15 @@ app.use(
 );
 
 
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(()=>{
-    throw createHttpError(404,"Route Not Found")
-})
-app.use(error_handler)
+// app.use(()=>{
+//     throw createHttpError(404,"Route Not Found")
+// })
+// app.use(error_handler)
 
+app.use('/api/auth',auth_router)
 app.get('/api',(req,res)=>{
      res.send("Api is working")
 })

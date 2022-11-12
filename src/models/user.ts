@@ -2,8 +2,7 @@ import { Model, Table, AutoIncrement, PrimaryKey, Column, AllowNull, NotEmpty } 
 
 export interface UserI{
     userid?: number | null
-    first_name: string
-    last_name: string
+    name: string
     email: string
     password: string
     otp?:number|null
@@ -26,12 +25,7 @@ export  class User extends Model implements UserI{
     @AllowNull(false)
     @NotEmpty
     @Column
-    first_name!: string
-
-    @AllowNull(false)
-    @NotEmpty
-    @Column
-    last_name!: string;
+    name!: string
 
     @AllowNull(false)
     @NotEmpty
