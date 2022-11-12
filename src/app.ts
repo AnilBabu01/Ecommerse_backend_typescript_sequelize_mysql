@@ -4,6 +4,7 @@ import error_handler from './handler/error_handler'
 import { sequelize } from './config/db';
 import cors from 'cors';
 import { router as auth_router } from './routes/auth';
+
 const PORT = process.env.PORT || 5000;
 
 const app = express();
@@ -12,7 +13,6 @@ app.use(
     origin: '*',
   }),
 );
-
 
 
 app.use(express.json());

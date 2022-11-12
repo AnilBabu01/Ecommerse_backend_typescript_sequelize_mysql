@@ -1,40 +1,38 @@
-import { RequestHandler} from 'express';
-import {User} from '../models/user'
-import jwt from 'jsonwebtoken'
-const JWT_SECRET = 'anilbabu$oy';
-
+import { RequestHandler } from "express";
+import { User } from "../models/user";
+import jwt from "jsonwebtoken";
+const JWT_SECRET = "anilbabu$oy";
 
 export const isAuthenticatedUser: RequestHandler = async (req, res, next) => {
-    try {
-        const token = req.header('Authorization');
-        const key = process.env.KEY;
+  try {
+    let token = req.header("Authorization");
+    if (token) {
+      token = token.split(" ")[1];
     
-        if (!token || !key)
-          return res.status(401).json({ success: false, msg: 'Not Authorized' });
-    
-        let validate: any = null;
-        try {
-          validate = jwt.verify(token, JWT_SECRET);
-        } catch (error) {
-           res.status(401).json({ success: false, msg: 'Not Authorized' });
-        }
-    
+      let validate: any = null;
+      try {
+        validate = jwt.verify(token, JWT_SECRET);
         if (!validate)
-          res.status(401).json({ success: false, msg: 'Not Authorized' });
-      
-        const user = await User.findOne({ where: { email: validate.userid} });
-    
-        if (!user)
-          return res.status(401).json({ success: false, msg: 'Not Authorized' });
-    
-      
+          res.status(401).json({ success: false, msg: "Not b  Authorized" });
+        if (validate) {
+          const user = await User.findOne({
+            where: { userid: validate.user.userid },
+          });
 
-        
-        next();
+          if (!user)
+            return res
+              .status(401)
+              .json({ success: false, msg: "Not  cAuthorized" });
+
+          req.user = (user as any)._doc;
+        }
       } catch (error) {
-        next(error);
+        res.status(401).json({ success: false, msg: "Not a Authorized" });
       }
-  };
+    }
 
-
-  
+    next();
+  } catch (error) {
+    next(error);
+  }
+};

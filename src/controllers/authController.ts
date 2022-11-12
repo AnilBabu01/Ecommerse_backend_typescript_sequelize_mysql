@@ -69,13 +69,15 @@ export const loginUser: RequestHandler = async (req, res, next) => {
         .json({ status: false, msg: "User name not exists"});
 
     }
+    
     else
     {
         const data = {
             user: {
-              id: user.id
+                userid : user.userid 
             }
           }
+          console.log(data)
           const token = jwt.sign(data, JWT_SECRET);
 
           res
@@ -87,6 +89,27 @@ export const loginUser: RequestHandler = async (req, res, next) => {
       next(error);
     }
   };
+
+
+  
+export const getallusers: RequestHandler = async (req, res, next) => {
+
+    let user = await User.findAll({  });
+    if(!user){
+        res
+        .status(401)
+        .json({ status: false, msg: "User name not exists"});
+
+    }
+    res
+    .status(200)
+    .json({ status: true, msg: "Fetch All users Successfully", user: user });
+}
+   
+   
+    
+
+  
 
 
 
