@@ -1,14 +1,15 @@
-import { RequestHandler } from "express";
+import { Handler } from "express";
 import { User } from "../models/user";
 import jwt from "jsonwebtoken";
 const JWT_SECRET = "anilbabu$oy";
 
-export const isAuthenticatedUser: RequestHandler = async (req, res, next) => {
+export const isAuthenticatedUser: Handler = async (req, res, next) => {
   try {
     let token = req.header("Authorization");
+
     if (token) {
       token = token.split(" ")[1];
-    
+      console.log(token);
       let validate: any = null;
       try {
         validate = jwt.verify(token, JWT_SECRET);
@@ -20,9 +21,8 @@ export const isAuthenticatedUser: RequestHandler = async (req, res, next) => {
           });
 
           if (!user)
-            return res
-              .status(401)
-              .json({ success: false, msg: "Not  cAuthorized" });
+            res.status(401).json({ success: false, msg: "Not  cAuthorized" });
+          return;
 
           req.user = (user as any)._doc;
         }
