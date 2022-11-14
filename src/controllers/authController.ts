@@ -1,11 +1,11 @@
-import { RequestHandler } from "express";
+import { Handler } from "express";
 import { User } from "../models/user";
 import jwt from "jsonwebtoken";
 import { hash, genSalt, compare } from "bcryptjs";
 
 const JWT_SECRET = "anilbabu$oy";
 //http://localhost:5000/api/auth/regster
-export const registerUser: RequestHandler = async (req, res, next) => {
+export const registerUser: Handler = async (req, res, next) => {
   try {
     const { email, name, password } = req.body;
     if (!name) {
@@ -50,7 +50,7 @@ export const registerUser: RequestHandler = async (req, res, next) => {
   }
 };
 //http://localhost:5000/api/auth/login
-export const loginUser: RequestHandler = async (req, res, next) => {
+export const loginUser: Handler = async (req, res, next) => {
   try {
     const {
       email,
@@ -93,7 +93,7 @@ export const loginUser: RequestHandler = async (req, res, next) => {
   }
 };
 //http://localhost:5000/api/auth/forgetpassword
-export const forgetpassword: RequestHandler = async (req, res, next) => {
+export const forgetpassword: Handler = async (req, res, next) => {
   try {
     const { email } = req.body;
     let user = await User.findOne({ where: { email: email } });
@@ -109,7 +109,7 @@ export const forgetpassword: RequestHandler = async (req, res, next) => {
   } catch (error) {}
 };
 //http://localhost:5000/api/auth/resetpassword
-export const resetpassword: RequestHandler = async (req, res, next) => {
+export const resetpassword: Handler = async (req, res, next) => {
   try {
     const { email, otp, password } = req.body;
     let user = await User.findOne({ where: { email: email } && { otp: otp } });
@@ -132,7 +132,7 @@ export const resetpassword: RequestHandler = async (req, res, next) => {
   } catch (error) {}
 };
 //http://localhost:5000/api/auth/getAlluers?page=1&limit=4
-export const getallusers: RequestHandler = async (req, res, next) => {
+export const getallusers: Handler = async (req, res, next) => {
   try {
     const limit = Number(req.query.limit);
     const page = Number(req.query.page);
@@ -140,6 +140,7 @@ export const getallusers: RequestHandler = async (req, res, next) => {
     const skip = (page - 1) * limit;
     console.log(typeof page);
     let users = await User.findAll({
+      attributes: { exclude: ["password", "otp", "createdAt", "updatedAt"] },
       limit: limit,
       offset: skip,
     });
@@ -150,6 +151,7 @@ export const getallusers: RequestHandler = async (req, res, next) => {
     if (users) {
       res.status(200).json({
         status: true,
+        page: page,
         length: users.length,
         msg: "Fetch All users Successfully",
         users: users,
