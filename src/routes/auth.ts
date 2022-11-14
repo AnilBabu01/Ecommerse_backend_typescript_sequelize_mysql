@@ -6,7 +6,7 @@ import {
   forgetpassword,
   resetpassword,
 } from "../controllers/authController";
-import { isAuthenticatedUser } from "../middleware/auth";
+
 export const router = Router();
 
 router.post("/regster", registerUser);
