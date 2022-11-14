@@ -1,19 +1,16 @@
-import express, { ErrorRequestHandler } from 'express';
-import createHttpError from 'http-errors'
-import error_handler from './handler/error_handler'
-import { sequelize } from './config/db';
-import cors from 'cors';
-import { router as auth_router } from './routes/auth';
+import express, { ErrorRequestHandler } from "express";
+import { sequelize } from "./config/db";
+import cors from "cors";
+import { router as auth_router } from "./routes/auth";
 
 const PORT = process.env.PORT || 5000;
 
 const app = express();
 app.use(
   cors({
-    origin: '*',
-  }),
+    origin: "*",
+  })
 );
-
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -22,35 +19,30 @@ app.use(express.urlencoded({ extended: true }));
 // })
 // app.use(error_handler)
 
-app.use('/api/auth',auth_router)
-app.get('/api',(req,res)=>{
-     res.send("Api is working")
-})
-
+app.use("/api/auth", auth_router);
+app.get("/api", (req, res) => {
+  res.send("Api is working");
+});
 
 app.listen(PORT, async () => {
   console.log(`Server is running on http://localhost:${PORT}`);
- 
-sequelize
-  .authenticate()
-  .then( async() => {
-    console.log("Connection has been established successfully.");
-   try {
-    await sequelize
-     .sync({ force: false })
-     .then(() => {
-  console.log("Re-sync successfully!");
-})
-.catch((error) => {
-  console.error("Unable to Re-sync : ", error);
-});
 
-    } catch (error) {
-        
-    }
-  })
-  .catch((error:any) => {
-    console.error("Unable to connect to the database: ", error);
-  });
-
+  sequelize
+    .authenticate()
+    .then(async () => {
+      console.log("Connection has been established successfully.");
+      try {
+        await sequelize
+          .sync({ force: false })
+          .then(() => {
+            console.log("Re-sync successfully!");
+          })
+          .catch((error) => {
+            console.error("Unable to Re-sync : ", error);
+          });
+      } catch (error) {}
+    })
+    .catch((error: any) => {
+      console.error("Unable to connect to the database: ", error);
+    });
 });
