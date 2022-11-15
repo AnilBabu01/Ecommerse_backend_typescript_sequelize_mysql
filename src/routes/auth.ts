@@ -2,7 +2,7 @@ import { Router } from "express";
 import {
   registerUser,
   loginUser,
-  getallusers,
+  getusers,
   forgetpassword,
   resetpassword,
 } from "../controllers/authController";
@@ -13,4 +13,4 @@ router.post("/regster", registerUser);
 router.post("/login", loginUser);
 router.post("/forgetpassword", forgetpassword);
 router.get("/resetpassword", resetpassword);
-router.get("/getAlluers", getallusers);
+router.get("/getAlluers", getusers);

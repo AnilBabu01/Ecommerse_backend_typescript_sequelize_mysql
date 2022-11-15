@@ -1,45 +1,48 @@
-import { Model, Table, AutoIncrement, PrimaryKey, Column, AllowNull, NotEmpty } from "sequelize-typescript";
+import {
+  Model,
+  Table,
+  AutoIncrement,
+  PrimaryKey,
+  Column,
+  AllowNull,
+  NotEmpty,
+} from "sequelize-typescript";
 
-export interface UserI{
-    userid?: number | null
-    name: string
-    email: string
-    password: string
-    otp?:number|null
+export interface UserI {
+  userid?: number | null;
+  name: string;
+  email: string;
+  password: string;
+  otp?: number | null;
 }
 
-@Table(
-    {
-        tableName: "users",
-        timestamps: true
-    }
-)
+@Table({
+  tableName: "users",
+  timestamps: true,
+})
+export class User extends Model implements UserI {
+  @AutoIncrement
+  @PrimaryKey
+  @Column
+  userid?: number;
 
-export  class User extends Model implements UserI{
-    
-    @AutoIncrement
-    @PrimaryKey
-    @Column
-    userid?: number
-    
-    @AllowNull(false)
-    @NotEmpty
-    @Column
-    name!: string
+  @AllowNull(false)
+  @NotEmpty
+  @Column
+  name!: string;
 
-    @AllowNull(false)
-    @NotEmpty
-    @Column
-    email!: string;
+  @AllowNull(false)
+  @NotEmpty
+  @Column
+  email!: string;
 
-    @AllowNull(false)
-    @NotEmpty
-    @Column
-    password!: string;
+  @AllowNull(false)
+  @NotEmpty
+  @Column
+  password!: string;
 
-    @AllowNull(true)
-    @NotEmpty
-    @Column
-    otp!: number;
-
+  @AllowNull(true)
+  @NotEmpty
+  @Column
+  otp!: number;
 }

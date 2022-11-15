@@ -132,19 +132,26 @@ export const resetpassword: RequestHandler = async (req, res, next) => {
   } catch (error) {}
 };
 //http://localhost:5000/api/auth/getAlluers?page=1&limit=4
-export const getallusers: RequestHandler = async (req, res, next) => {
+export const getusers: RequestHandler = async (req, res, next) => {
   try {
     const limit = Number(req.query.limit);
     const page = Number(req.query.page);
 
     const skip = (page - 1) * limit;
     console.log(typeof page);
-    let users = await User.findAll({
-      attributes: { exclude: ["password", "otp", "createdAt", "updatedAt"] },
-      limit: limit,
-      offset: skip,
-    });
+    var users;
 
+    if (req.query.limit && req.query.page) {
+      users = await User.findAll({
+        attributes: { exclude: ["password", "otp", "createdAt", "updatedAt"] },
+        limit: limit,
+        offset: skip,
+      });
+    } else {
+      users = await User.findAll({
+        attributes: { exclude: ["password", "otp", "createdAt", "updatedAt"] },
+      });
+    }
     if (!users) {
       res.status(401).json({ status: false, msg: "User name not exists" });
     }
