@@ -38,7 +38,7 @@ export const fetch_user: RequestHandler = async (req, res, next) => {
   }
 };
 
-exports.authorizeRoles = (...roles: any) => {
+export const authorizeRoles = (...roles: any) => {
   return (req: Request, res: Response, next: NextFunction) => {
     if (req.user) {
       console.log(req.user.role);
