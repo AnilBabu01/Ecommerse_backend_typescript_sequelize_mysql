@@ -14,6 +14,7 @@ export interface UserI {
   email: string;
   password: string;
   otp?: number | null;
+  role: String;
 }
 
 @Table({
@@ -30,6 +31,11 @@ export class User extends Model implements UserI {
   @NotEmpty
   @Column
   name!: string;
+
+  @AllowNull(false)
+  @NotEmpty
+  @Column
+  role!: string;
 
   @AllowNull(false)
   @NotEmpty

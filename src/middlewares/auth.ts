@@ -1,41 +1,55 @@
-import { Request, Response, NextFunction } from "express";
+import { Request, Response, NextFunction, RequestHandler } from "express";
 import { User } from "../models/user";
 import { verify } from "jsonwebtoken";
 
 const JWT_SECRET = "anilbabu$oy";
 
-export const fetch_user = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
+export const fetch_user: RequestHandler = async (req, res, next) => {
   try {
     const token = req.header("Authorization");
-    const key = process.env.KEY;
-    console.log(token);
-    if (!token || !key)
+
+    if (!token) {
       return res.status(401).json({ success: false, msg: "Not Authorized" });
+    }
 
     let validate: any = null;
     try {
-      validate = verify(token, JWT_SECRET);
+      validate = verify(token.split(" ")[1], JWT_SECRET);
     } catch (error) {
       return res.status(401).json({ success: false, msg: "Not Authorized" });
     }
 
-    if (!validate.user)
+    if (!validate.user) {
       return res.status(401).json({ success: false, msg: "Not Authorized" });
+    }
 
     const user = await User.findOne({
-      where: { email: validate.userid.userid },
+      where: { userid: validate.user.userid },
     });
 
-    if (!user)
+    if (!user) {
       return res.status(401).json({ success: false, msg: "Not Authorized" });
+    }
 
-    req.user = (user as any)._doc;
+    req.user = user;
     next();
   } catch (error) {
     next(error);
   }
+};
+
+exports.authorizeRoles = (...roles: any) => {
+  return (req: Request, res: Response, next: NextFunction) => {
+    if (req.user) {
+      console.log(req.user.role);
+      if (!roles.includes(req.user.role)) {
+        return res.status(403).json({
+          Success: false,
+          msg: `Role (${req.user.role}) is not allowed to acccess this resource`,
+        });
+      }
+    }
+
+    next();
+  };
 };
