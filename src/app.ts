@@ -2,7 +2,7 @@ import express, { ErrorRequestHandler } from "express";
 import { sequelize } from "./config/db";
 import cors from "cors";
 import { router as auth_router } from "./routes/auth";
-
+import { router as product_router } from "./routes/product";
 const PORT = process.env.PORT || 8080;
 
 const app = express();
@@ -20,6 +20,7 @@ app.use(express.urlencoded({ extended: true }));
 // app.use(error_handler)
 
 app.use("/api/auth", auth_router);
+app.use("/api", product_router);
 app.get("/api", (req, res) => {
   res.send("Api is working");
 });

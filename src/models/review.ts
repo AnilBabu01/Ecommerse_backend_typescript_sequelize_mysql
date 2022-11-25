@@ -45,7 +45,7 @@ export class Review extends Model implements ReviewI {
   @Column
   comment!: string;
 
-  @AllowNull(true)
+  @AllowNull(false)
   @NotEmpty
   @ForeignKey(() => Product)
   @Column
