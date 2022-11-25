@@ -12,7 +12,7 @@ export const fetch_user: RequestHandler = async (req, res, next) => {
       return res.status(401).json({ success: false, msg: "Not Authorized" });
     }
 
-    let validate: any = null;
+    let validate: any;
     try {
       validate = verify(token.split(" ")[1], JWT_SECRET);
     } catch (error) {
@@ -38,7 +38,7 @@ export const fetch_user: RequestHandler = async (req, res, next) => {
   }
 };
 
-export const authorizeRoles = (...roles: any) => {
+export const authorizeRoles = (...roles: String[]) => {
   return (req: Request, res: Response, next: NextFunction) => {
     if (req.user) {
       console.log(req.user.role);
