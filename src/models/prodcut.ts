@@ -12,9 +12,14 @@ import {
 export interface ProductI {
   productid?: number | null;
   name: string;
-  email: string;
-  password: string;
-  otp?: number | null;
+  price: number;
+  description: string;
+  ratings: number;
+  images: string;
+  category: string;
+  seller: string;
+  stock: number;
+  numOfReviews: number;
   role?: String;
 }
 
@@ -34,23 +39,43 @@ export class Product extends Model implements ProductI {
   name!: string;
 
   @AllowNull(false)
-  @Default("user")
   @NotEmpty
   @Column
-  role!: string;
+  price!: number;
 
   @AllowNull(false)
   @NotEmpty
   @Column
-  email!: string;
+  description!: string;
+
+  @AllowNull(false)
+  @NotEmpty
+  @Default(0)
+  @Column
+  ratings!: number;
 
   @AllowNull(false)
   @NotEmpty
   @Column
-  password!: string;
+  images!: string;
 
-  @AllowNull(true)
+  @AllowNull(false)
   @NotEmpty
   @Column
-  otp!: number;
+  category!: string;
+
+  @AllowNull(false)
+  @NotEmpty
+  @Column
+  seller!: string;
+
+  @AllowNull(false)
+  @NotEmpty
+  @Column
+  stock!: number;
+
+  @AllowNull(false)
+  @NotEmpty
+  @Column
+  numOfReviews!: number;
 }

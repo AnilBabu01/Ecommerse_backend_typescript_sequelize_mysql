@@ -14,11 +14,10 @@ import {
 import { Product } from "./prodcut";
 export interface ReviewI {
   reviewid?: number | null;
+  userid: number | null;
   name: string;
-  email: string;
-  password: string;
+  comment: string;
   productid?: number | null;
-  role?: String;
 }
 
 @Table({
@@ -34,23 +33,17 @@ export class Review extends Model implements ReviewI {
   @AllowNull(false)
   @NotEmpty
   @Column
+  userid!: number;
+
+  @AllowNull(false)
+  @NotEmpty
+  @Column
   name!: string;
 
   @AllowNull(false)
-  @Default("user")
   @NotEmpty
   @Column
-  role!: string;
-
-  @AllowNull(false)
-  @NotEmpty
-  @Column
-  email!: string;
-
-  @AllowNull(false)
-  @NotEmpty
-  @Column
-  password!: string;
+  comment!: string;
 
   @AllowNull(true)
   @NotEmpty
