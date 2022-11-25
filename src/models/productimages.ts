@@ -39,9 +39,6 @@ export class Productimage extends Model implements productimageI {
   @Column
   productid!: number;
 
-  @HasOne(() => Product, "productid")
-  welfare!: Product;
-
   @BelongsTo(() => Product)
   Product?: Product;
 }

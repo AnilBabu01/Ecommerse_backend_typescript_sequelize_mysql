@@ -7,7 +7,7 @@ import {
   AllowNull,
   NotEmpty,
   Default,
-  HasMany,
+  HasOne,
 } from "sequelize-typescript";
 import { Productimage } from "./productimages";
 export interface ProductI {
@@ -73,4 +73,7 @@ export class Product extends Model implements ProductI {
   @Default(0)
   @Column
   numOfReviews!: number;
+
+  @HasOne(() => Productimage, "productid")
+  images!: Productimage;
 }
