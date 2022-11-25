@@ -6,6 +6,7 @@ import {
   Column,
   AllowNull,
   NotEmpty,
+  Default,
 } from "sequelize-typescript";
 
 export interface UserI {
@@ -14,7 +15,7 @@ export interface UserI {
   email: string;
   password: string;
   otp?: number | null;
-  role: String;
+  role?: String;
 }
 
 @Table({
@@ -33,6 +34,7 @@ export class User extends Model implements UserI {
   name!: string;
 
   @AllowNull(false)
+  @Default("user")
   @NotEmpty
   @Column
   role!: string;
