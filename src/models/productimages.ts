@@ -8,6 +8,7 @@ import {
   NotEmpty,
   ForeignKey,
   BelongsTo,
+  HasOne,
 } from "sequelize-typescript";
 
 import { Product } from "./prodcut";
@@ -37,6 +38,9 @@ export class Productimage extends Model implements productimageI {
   @ForeignKey(() => Product)
   @Column
   productid!: number;
+
+  @HasOne(() => Product, "productid")
+  welfare!: Product;
 
   @BelongsTo(() => Product)
   Product?: Product;

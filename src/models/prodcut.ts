@@ -7,8 +7,9 @@ import {
   AllowNull,
   NotEmpty,
   Default,
+  HasMany,
 } from "sequelize-typescript";
-
+import { Productimage } from "./productimages";
 export interface ProductI {
   productid?: number | null;
   name: string;

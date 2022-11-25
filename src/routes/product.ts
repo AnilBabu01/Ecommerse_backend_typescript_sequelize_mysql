@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { createproduct } from "../controllers/productControllers";
+import { createproduct, getproduct } from "../controllers/productControllers";
 import { fetch_user, authorizeRoles } from "../middlewares/auth";
 export const router = Router();
 
@@ -9,3 +9,5 @@ router.post(
   authorizeRoles("admin"),
   createproduct
 );
+
+router.get("/admin/product/getproducts", getproduct);
