@@ -15,12 +15,10 @@ export interface ProductI {
   price: number;
   description: string;
   ratings: number;
-  images: string;
   category: string;
   seller: string;
   stock: number;
   numOfReviews: number;
-  role?: String;
 }
 
 @Table({
@@ -48,16 +46,11 @@ export class Product extends Model implements ProductI {
   @Column
   description!: string;
 
-  @AllowNull(false)
+  @AllowNull(true)
   @NotEmpty
   @Default(0)
   @Column
   ratings!: number;
-
-  @AllowNull(false)
-  @NotEmpty
-  @Column
-  images!: string;
 
   @AllowNull(false)
   @NotEmpty
@@ -74,8 +67,9 @@ export class Product extends Model implements ProductI {
   @Column
   stock!: number;
 
-  @AllowNull(false)
+  @AllowNull(true)
   @NotEmpty
+  @Default(0)
   @Column
   numOfReviews!: number;
 }
