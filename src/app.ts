@@ -3,7 +3,7 @@ import { sequelize } from "./config/db";
 import cors from "cors";
 import { router as auth_router } from "./routes/auth";
 
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 8080;
 
 const app = express();
 app.use(
