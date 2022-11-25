@@ -7,14 +7,17 @@ import {
   AllowNull,
   NotEmpty,
   Default,
+  ForeignKey,
+  BelongsTo,
 } from "sequelize-typescript";
 
+import { Product } from "./prodcut";
 export interface ReviewI {
   reviewid?: number | null;
   name: string;
   email: string;
   password: string;
-  otp?: number | null;
+  productid?: number | null;
   role?: String;
 }
 
@@ -51,6 +54,10 @@ export class Review extends Model implements ReviewI {
 
   @AllowNull(true)
   @NotEmpty
+  @ForeignKey(() => Product)
   @Column
-  otp!: number;
+  productid!: number;
+
+  @BelongsTo(() => Product)
+  Product?: Product;
 }

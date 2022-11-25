@@ -26,7 +26,9 @@ app.get("/api", (req, res) => {
 
 app.listen(PORT, async () => {
   console.log(`Server is running on http://localhost:${PORT}`);
-
+  sequelize.databaseVersion().then((databaseVersion) => {
+    console.log(databaseVersion);
+  });
   sequelize
     .authenticate()
     .then(async () => {
