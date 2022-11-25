@@ -8,8 +8,10 @@ import {
   NotEmpty,
   Default,
   HasOne,
+  HasMany,
 } from "sequelize-typescript";
 import { Productimage } from "./productimages";
+import { Review } from "./review";
 export interface ProductI {
   productid?: number | null;
   name: string;
@@ -76,4 +78,7 @@ export class Product extends Model implements ProductI {
 
   @HasOne(() => Productimage, "productid")
   images!: Productimage;
+
+  @HasOne(() => Review, "productid")
+  reviews!: Review;
 }

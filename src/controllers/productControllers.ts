@@ -37,11 +37,8 @@ export const createproduct: RequestHandler = async (req, res, next) => {
 export const getproduct: RequestHandler = async (req, res, next) => {
   try {
     const produts = await Product.findAll({
-      include: [
-        {
-          model: Productimage,
-        },
-      ],
+      attributes: ["productid", "name", "price"],
+      include: [{ model: Productimage }, { model: Review }],
     });
     res.status(200).json({
       status: true,
