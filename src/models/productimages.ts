@@ -38,7 +38,4 @@ export class Productimage extends Model implements productimageI {
   @ForeignKey(() => Product)
   @Column
   productid!: number;
-
-  @BelongsTo(() => Product)
-  Product?: Product;
 }

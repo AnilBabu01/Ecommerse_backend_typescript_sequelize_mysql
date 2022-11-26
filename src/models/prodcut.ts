@@ -76,9 +76,9 @@ export class Product extends Model implements ProductI {
   @Column
   numOfReviews!: number;
 
-  @HasOne(() => Productimage, "productid")
+  @HasMany(() => Productimage, "productid")
   images!: Productimage;
 
-  @HasOne(() => Review, "productid")
+  @HasMany(() => Review, "productid")
   reviews!: Review;
 }
