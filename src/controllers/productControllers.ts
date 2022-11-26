@@ -46,7 +46,7 @@ export const createproduct: RequestHandler = async (req, res, next) => {
   }
 };
 
-//http://localhost:8080/api/admin/product/create
+//http://localhost:8080/api/admin/product/getproducts
 export const getproduct: RequestHandler = async (req, res, next) => {
   try {
     const products = await Product.findAll({
@@ -76,7 +76,7 @@ export const getproduct: RequestHandler = async (req, res, next) => {
     next(error);
   }
 };
-//http://localhost:8080/api/admin/product/create
+//http://localhost:8080/api/admin/product/delete/12
 
 export const deleteproduct: RequestHandler = async (req, res, next) => {
   try {
@@ -94,7 +94,6 @@ export const deleteproduct: RequestHandler = async (req, res, next) => {
         where: { productid: product.productid },
       });
 
-      console.log(images[0].dataValues.url);
       for (var i = 0; i < images.length; i++) {
         console.log(images[i].dataValues.url);
         var str = images[i].dataValues.url.substring(22);
