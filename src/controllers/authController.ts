@@ -8,6 +8,7 @@ const JWT_SECRET = "anilbabu$oy";
 export const registerUser: RequestHandler = async (req, res, next) => {
   try {
     const { email, name, password } = req.body;
+    console.log(email, name, password);
     if (!name) {
       res.status(401).json({ msg: "name required", success: false });
     }
@@ -164,6 +165,24 @@ export const getusers: RequestHandler = async (req, res, next) => {
         users: users,
       });
     }
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+// get currently user logged in details   api/auth/me
+
+export const getUserProfile: RequestHandler = async (req, res, next) => {
+  try {
+    console.log("data me ", req.user?.userid);
+    const user = await User.findOne({
+      attributes: { exclude: ["createdAt", "updatedAt", "password"] },
+      where: { userid: req.user?.userid },
+    });
+    res.status(200).json({
+      success: true,
+      user,
+    });
   } catch (error) {
     console.log(error);
   }

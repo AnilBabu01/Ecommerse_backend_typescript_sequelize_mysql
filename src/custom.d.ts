@@ -8,5 +8,7 @@ declare namespace Express {
       otp?: number | null;
       role: String;
     };
+
+    files: string[];
   }
 }

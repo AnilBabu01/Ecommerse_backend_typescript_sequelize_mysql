@@ -2,25 +2,14 @@ import { RequestHandler } from "express";
 import { Product } from "../models/prodcut";
 import { Productimage } from "../models/productimages";
 import { Review } from "../models/review";
+//http://localhost:8080/api/admin/product/create
 export const createproduct: RequestHandler = async (req, res, next) => {
   try {
-    const {
-      name,
-      price,
-      description,
-      category,
-      seller,
-      stock,
-      image,
-      url,
-      productid,
-    } = req.body;
-    console.log(name, price, description, category, seller, stock);
+    // const { name, price, description, category, seller, stock, image } =
+    //   req.body;
 
-    let saveimage = await Productimage.create({
-      url: url,
-      productid: productid,
-    });
+    const files = req.files;
+    console.log(req.files);
     // const product = await Product.create({
     //   name: name,
     //   price: price,
@@ -36,17 +25,18 @@ export const createproduct: RequestHandler = async (req, res, next) => {
     //     productid: product.productid,
     //   });
     // }
-    res.status(200).json({
-      status: true,
-      saveimage: saveimage,
-      msg: "Product added successfully",
-      // product: product,
-    });
+    // res.status(200).json({
+    //   status: true,
+    //   saveimage: saveimage,
+    //   msg: "Product added successfully",
+    //   product: product,
+    // });
   } catch (error) {
     next(error);
   }
 };
-//
+
+////http://localhost:8080/api/admin/product/create
 export const getproduct: RequestHandler = async (req, res, next) => {
   try {
     const produts = await Product.findAll({

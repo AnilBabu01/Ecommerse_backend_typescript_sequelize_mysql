@@ -50,7 +50,4 @@ export class Review extends Model implements ReviewI {
   @ForeignKey(() => Product)
   @Column
   productid!: number;
-
-  @BelongsTo(() => Product)
-  Product?: Product;
 }
