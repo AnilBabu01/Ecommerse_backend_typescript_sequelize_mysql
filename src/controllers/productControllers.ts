@@ -5,32 +5,41 @@ import { Review } from "../models/review";
 //http://localhost:8080/api/admin/product/create
 export const createproduct: RequestHandler = async (req, res, next) => {
   try {
-    // const { name, price, description, category, seller, stock, image } =
-    //   req.body;
+    const { name, price, description, category, seller, stock } = req.body;
 
     const files = req.files;
-    console.log(req.files);
-    // const product = await Product.create({
-    //   name: name,
-    //   price: price,
-    //   description: description,
-    //   category: category,
-    //   seller: seller,
-    //   stock: stock,
-    // });
-    // let saveimage: any;
-    // if (product) {
-    //   saveimage = await Productimage.create({
-    //     url: image,
-    //     productid: product.productid,
-    //   });
-    // }
-    // res.status(200).json({
-    //   status: true,
-    //   saveimage: saveimage,
-    //   msg: "Product added successfully",
-    //   product: product,
-    // });
+
+    const product = await Product.create({
+      name: name,
+      price: price,
+      description: description,
+      category: category,
+      seller: seller,
+      stock: stock,
+    });
+
+    if (product) {
+      if (files) {
+        const url = req.protocol + "://" + req.get("host");
+        for (let i = 0; i < files.length; i++) {
+          await Productimage.create({
+            url: url + "/images/" + files[i].filename,
+            productid: product.productid,
+          });
+        }
+      }
+    }
+
+    const images = await Productimage.findAll({
+      where: { productid: product.productid },
+    });
+
+    res.status(200).json({
+      status: true,
+      images: images,
+      msg: "Product added successfully",
+      product: product,
+    });
   } catch (error) {
     next(error);
   }
@@ -39,7 +48,7 @@ export const createproduct: RequestHandler = async (req, res, next) => {
 ////http://localhost:8080/api/admin/product/create
 export const getproduct: RequestHandler = async (req, res, next) => {
   try {
-    const produts = await Product.findAll({
+    const products = await Product.findAll({
       attributes: [
         "productid",
         "name",
@@ -58,7 +67,8 @@ export const getproduct: RequestHandler = async (req, res, next) => {
     });
     res.status(200).json({
       status: true,
-      produts: produts,
+      productsCount: products.length,
+      products: products,
       msg: "Product added successfully",
     });
   } catch (error) {

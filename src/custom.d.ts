@@ -8,9 +8,9 @@ declare namespace Express {
       otp?: number | null;
       role: String;
     };
-    product?: {
-      files?: any[];
-      name: string;
-    };
+
+    files?: any[{
+      filename;
+    }];
   }
 }

@@ -13,7 +13,7 @@ app.use(
     credentials: true,
   })
 );
-
+app.use("/images", express.static("images"));
 app.use(express.json());
 app.use(bodyparser.urlencoded({ extended: true }));
 // app.use(()=>{
