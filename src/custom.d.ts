@@ -12,5 +12,9 @@ declare namespace Express {
     files?: any[{
       filename;
     }];
+
+    images?: any[{
+      Productimage;
+    }];
   }
 }

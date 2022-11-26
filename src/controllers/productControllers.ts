@@ -2,6 +2,7 @@ import { RequestHandler } from "express";
 import { Product } from "../models/prodcut";
 import { Productimage } from "../models/productimages";
 import { Review } from "../models/review";
+import fs from "fs";
 //http://localhost:8080/api/admin/product/create
 export const createproduct: RequestHandler = async (req, res, next) => {
   try {
@@ -45,7 +46,7 @@ export const createproduct: RequestHandler = async (req, res, next) => {
   }
 };
 
-////http://localhost:8080/api/admin/product/create
+//http://localhost:8080/api/admin/product/create
 export const getproduct: RequestHandler = async (req, res, next) => {
   try {
     const products = await Product.findAll({
@@ -73,5 +74,44 @@ export const getproduct: RequestHandler = async (req, res, next) => {
     });
   } catch (error) {
     next(error);
+  }
+};
+//http://localhost:8080/api/admin/product/create
+
+export const deleteproduct: RequestHandler = async (req, res, next) => {
+  try {
+    let product = await Product.findOne({
+      where: { Productid: req.params.id },
+      include: [{ model: Productimage, attributes: ["imageid", "url"] }],
+    });
+    if (!product) {
+      return res.status(404).json({ status: false, msg: "Product not fund" });
+    }
+
+    if (product) {
+      const images = await Productimage.findAll({
+        attributes: ["url"],
+        where: { productid: product.productid },
+      });
+
+      console.log(images[0].dataValues.url);
+      for (var i = 0; i < images.length; i++) {
+        console.log(images[i].dataValues.url);
+        var str = images[i].dataValues.url.substring(22);
+        fs.unlinkSync(str);
+      }
+    }
+    await Product.destroy({
+      where: {
+        productid: req.params.id,
+      },
+    });
+
+    res.status(201).json({
+      status: true,
+      msg: "Product deleted Successfully",
+    });
+  } catch (error) {
+    console.log(error);
   }
 };
