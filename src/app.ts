@@ -1,6 +1,7 @@
 import express, { ErrorRequestHandler } from "express";
 import { sequelize } from "./config/db";
 import cors from "cors";
+import bodyparser from "body-parser";
 import { router as auth_router } from "./routes/auth";
 import { router as product_router } from "./routes/product";
 const PORT = process.env.PORT || 8080;
@@ -14,7 +15,7 @@ app.use(
 );
 
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(bodyparser.urlencoded({ extended: true }));
 // app.use(()=>{
 //     throw createHttpError(404,"Route Not Found")
 // })

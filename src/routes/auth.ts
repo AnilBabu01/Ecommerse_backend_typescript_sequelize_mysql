@@ -8,6 +8,7 @@ import {
   getUserProfile,
 } from "../controllers/authController";
 import { fetch_user, authorizeRoles } from "../middlewares/auth";
+
 export const router = Router();
 
 router.post("/regster", registerUser);
