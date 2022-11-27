@@ -246,7 +246,7 @@ export const updateProduct: RequestHandler = async (req, res, next) => {
     console.log(error);
   }
 };
-
+//http://localhost:8080/api/product/review
 export const createProductReview: RequestHandler = async (req, res, next) => {
   try {
     const { rating, comment, productId } = req.body;
@@ -259,19 +259,39 @@ export const createProductReview: RequestHandler = async (req, res, next) => {
     if (product) {
       if (req.user) {
         let isReviewed: any;
-        if (req.user) {
-          isReviewed = await Review.findOne({
-            where: { userid: req.user.userid },
-          });
-        }
+
+        isReviewed = await Review.findOne({
+          where: { userid: req.user.userid },
+        });
+
         if (isReviewed) {
           if (isReviewed.userid === req.user.userid) {
-            await Review.update(req.body, {
-              where: { where: { userid: req.user.userid } },
+            await isReviewed.update({
+              userid: req.user.userid,
+              name: req.user.name,
+              rating: Number(rating),
+              comment: comment,
+              productid: productId,
             });
-
-            console.log(isReviewed);
           }
+          product = await Product.findOne({
+            attributes: [
+              "productid",
+              "name",
+              "price",
+              "description",
+              "ratings",
+              "category",
+              "seller",
+              "stock",
+              "numOfReviews",
+            ],
+            where: { Productid: productId },
+            include: [
+              { model: Productimage, attributes: ["imageid", "url"] },
+              { model: Review },
+            ],
+          });
         } else {
           review = await Review.create({
             userid: req.user.userid,
@@ -299,15 +319,22 @@ export const createProductReview: RequestHandler = async (req, res, next) => {
               { model: Review },
             ],
           });
+          review = await Review.findAll({
+            where: { Productid: productId },
+          });
+
+          let ratingss: any;
+          if (review) {
+            ratingss =
+              review.reduce((acc: any, item: any) => item.rating + acc, 0) /
+              review.length;
+            await product.update({
+              numOfReviews: ratingss,
+            });
+          }
         }
       }
     }
-
-    // product.ratings =
-    //   product.reviews.reduce((acc, item) => item.rating + acc, 0) /
-    //   product.reviews.length;
-
-    // await product.save({ validateBeforeSave: false });
 
     res.status(200).json({
       success: true,
