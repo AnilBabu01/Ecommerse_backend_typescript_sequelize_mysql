@@ -3,9 +3,10 @@ import { User } from "../models/user";
 import { Review } from "../models/review";
 import { Product } from "../models/prodcut";
 import { Productimage } from "../models/productimages";
-
+import { Order } from "../models/order";
+import { Orderitems } from "../models/orderitems";
 export const sequelize = new Sequelize("test", "root", "", {
   host: "localhost",
   dialect: "mysql",
-  models: [User, Review, Product, Productimage],
+  models: [User, Review, Product, Productimage, Order, Orderitems],
 });

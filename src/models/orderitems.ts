@@ -7,27 +7,29 @@ import {
   AllowNull,
   NotEmpty,
   Default,
-  HasMany,
+  ForeignKey,
 } from "sequelize-typescript";
+
 import { Order } from "./order";
-export interface UserI {
-  userid?: number | null;
+
+export interface orderitemsI {
+  orderitemid?: number | null;
   name: string;
-  email: string;
-  password: string;
-  otp?: number | null;
-  role?: String;
+  quantity: number;
+  image: string;
+  price: number;
+  orderid?: number | null;
 }
 
 @Table({
-  tableName: "users",
+  tableName: "orderitems",
   timestamps: true,
 })
-export class User extends Model implements UserI {
+export class Orderitems extends Model implements orderitemsI {
   @AutoIncrement
   @PrimaryKey
   @Column
-  userid?: number;
+  orderitemid?: number;
 
   @AllowNull(false)
   @NotEmpty
@@ -35,26 +37,24 @@ export class User extends Model implements UserI {
   name!: string;
 
   @AllowNull(false)
-  @Default("user")
   @NotEmpty
   @Column
-  role!: string;
+  quantity!: number;
 
   @AllowNull(false)
   @NotEmpty
   @Column
-  email!: string;
-
-  @AllowNull(false)
-  @NotEmpty
-  @Column
-  password!: string;
+  image!: string;
 
   @AllowNull(true)
   @NotEmpty
+  @Default(0)
   @Column
-  otp!: number;
+  price!: number;
 
-  @HasMany(() => Order, "userid")
-  orders!: Order;
+  @AllowNull(false)
+  @NotEmpty
+  @ForeignKey(() => Order)
+  @Column
+  orderid!: number;
 }
