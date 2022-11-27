@@ -252,6 +252,8 @@ export const createProductReview: RequestHandler = async (req, res, next) => {
     const { rating, comment, productId } = req.body;
     let product: any;
     let review: any;
+    let newreview: any;
+    let ratingss: any;
     product = await Product.findOne({
       where: { Productid: productId },
     });
@@ -292,8 +294,22 @@ export const createProductReview: RequestHandler = async (req, res, next) => {
               { model: Review },
             ],
           });
+
+          review = await Review.findAll({
+            where: { Productid: productId },
+          });
+
+          if (review) {
+            ratingss =
+              review.reduce((acc: any, item: any) => item.rating + acc, 0) /
+              review.length;
+            await product.update({
+              numOfReviews: review.length,
+              ratings: ratingss,
+            });
+          }
         } else {
-          review = await Review.create({
+          await Review.create({
             userid: req.user.userid,
             name: req.user.name,
             rating: Number(rating),
@@ -323,13 +339,13 @@ export const createProductReview: RequestHandler = async (req, res, next) => {
             where: { Productid: productId },
           });
 
-          let ratingss: any;
           if (review) {
             ratingss =
               review.reduce((acc: any, item: any) => item.rating + acc, 0) /
               review.length;
             await product.update({
-              numOfReviews: ratingss,
+              numOfReviews: review.length,
+              ratings: ratingss,
             });
           }
         }
