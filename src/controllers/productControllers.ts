@@ -49,23 +49,47 @@ export const createproduct: RequestHandler = async (req, res, next) => {
 //http://localhost:8080/api/admin/product/getproducts
 export const getproduct: RequestHandler = async (req, res, next) => {
   try {
-    const products = await Product.findAll({
-      attributes: [
-        "productid",
-        "name",
-        "price",
-        "description",
-        "ratings",
-        "category",
-        "seller",
-        "stock",
-        "numOfReviews",
-      ],
-      include: [
-        { model: Productimage, attributes: ["imageid", "url"] },
-        { model: Review },
-      ],
-    });
+    console.log(typeof req.query.category);
+    let products: any;
+    if (req.query.category) {
+      products = await Product.findAll({
+        attributes: [
+          "productid",
+          "name",
+          "price",
+          "description",
+          "ratings",
+          "category",
+          "seller",
+          "stock",
+          "numOfReviews",
+        ],
+        where: { category: req.query.category },
+        include: [
+          { model: Productimage, attributes: ["imageid", "url"] },
+          { model: Review },
+        ],
+      });
+    } else {
+      products = await Product.findAll({
+        attributes: [
+          "productid",
+          "name",
+          "price",
+          "description",
+          "ratings",
+          "category",
+          "seller",
+          "stock",
+          "numOfReviews",
+        ],
+        include: [
+          { model: Productimage, attributes: ["imageid", "url"] },
+          { model: Review },
+        ],
+      });
+    }
+
     res.status(200).json({
       status: true,
       productsCount: products.length,
