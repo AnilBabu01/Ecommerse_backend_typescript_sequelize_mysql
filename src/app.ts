@@ -4,6 +4,8 @@ import cors from "cors";
 import bodyparser from "body-parser";
 import { router as auth_router } from "./routes/auth";
 import { router as product_router } from "./routes/product";
+import { router as order_router } from "./routes/order";
+import { router as payment_router } from "./routes/payment";
 const PORT = process.env.PORT || 8080;
 
 const app = express();
@@ -23,6 +25,9 @@ app.use(bodyparser.urlencoded({ extended: true }));
 
 app.use("/api/auth", auth_router);
 app.use("/api", product_router);
+app.use("/api", order_router);
+app.use("/api", payment_router);
+
 app.get("/api", (req, res) => {
   res.send("Api is working");
 });
