@@ -17,6 +17,7 @@ export interface ReviewI {
   userid: number | null;
   name: string;
   comment: string;
+  rating?: number | null;
   productid?: number | null;
 }
 
@@ -44,6 +45,11 @@ export class Review extends Model implements ReviewI {
   @NotEmpty
   @Column
   comment!: string;
+
+  @AllowNull(false)
+  @NotEmpty
+  @Column
+  rating?: number;
 
   @AllowNull(false)
   @NotEmpty

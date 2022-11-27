@@ -246,3 +246,75 @@ export const updateProduct: RequestHandler = async (req, res, next) => {
     console.log(error);
   }
 };
+
+export const createProductReview: RequestHandler = async (req, res, next) => {
+  try {
+    const { rating, comment, productId } = req.body;
+    let product: any;
+    let review: any;
+    product = await Product.findOne({
+      where: { Productid: productId },
+    });
+
+    if (product) {
+      if (req.user) {
+        let isReviewed: any;
+        if (req.user) {
+          isReviewed = await Review.findOne({
+            where: { userid: req.user.userid },
+          });
+        }
+        if (isReviewed) {
+          if (isReviewed.userid === req.user.userid) {
+            await Review.update(req.body, {
+              where: { where: { userid: req.user.userid } },
+            });
+
+            console.log(isReviewed);
+          }
+        } else {
+          review = await Review.create({
+            userid: req.user.userid,
+            name: req.user.name,
+            rating: Number(rating),
+            comment: comment,
+            productid: productId,
+          });
+
+          product = await Product.findOne({
+            attributes: [
+              "productid",
+              "name",
+              "price",
+              "description",
+              "ratings",
+              "category",
+              "seller",
+              "stock",
+              "numOfReviews",
+            ],
+            where: { Productid: productId },
+            include: [
+              { model: Productimage, attributes: ["imageid", "url"] },
+              { model: Review },
+            ],
+          });
+        }
+      }
+    }
+
+    // product.ratings =
+    //   product.reviews.reduce((acc, item) => item.rating + acc, 0) /
+    //   product.reviews.length;
+
+    // await product.save({ validateBeforeSave: false });
+
+    res.status(200).json({
+      success: true,
+      product: product,
+      msg: "Rating added Successfully",
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};

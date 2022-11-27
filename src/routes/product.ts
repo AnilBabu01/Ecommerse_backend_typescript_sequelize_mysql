@@ -5,6 +5,7 @@ import {
   deleteproduct,
   getSingleProduct,
   updateProduct,
+  createProductReview,
 } from "../controllers/productControllers";
 import { fetch_user, authorizeRoles } from "../middlewares/auth";
 import { upload } from "../middlewares/upload";
@@ -36,3 +37,5 @@ router
   )
   .delete(fetch_user, authorizeRoles("admin"), deleteproduct);
 router;
+
+router.route("/product/review").put(fetch_user, createProductReview);
