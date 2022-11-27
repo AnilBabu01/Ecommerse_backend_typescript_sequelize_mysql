@@ -114,3 +114,111 @@ export const deleteproduct: RequestHandler = async (req, res, next) => {
     console.log(error);
   }
 };
+
+//http://localhost:8080/api/product/getSingleProduct/13
+export const getSingleProduct: RequestHandler = async (req, res, next) => {
+  try {
+    let product = await Product.findOne({
+      attributes: [
+        "productid",
+        "name",
+        "price",
+        "description",
+        "ratings",
+        "category",
+        "seller",
+        "stock",
+        "numOfReviews",
+      ],
+      where: { Productid: req.params.id },
+      include: [
+        { model: Productimage, attributes: ["imageid", "url"] },
+        { model: Review },
+      ],
+    });
+    if (!product) {
+      return res.status(404).json({ status: false, msg: "Product not fund" });
+    } else {
+      res.status(201).json({
+        status: true,
+        product,
+      });
+    }
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+//http://localhost:8080/api/admin/product/13
+
+export const updateProduct: RequestHandler = async (req, res, next) => {
+  try {
+    let id = req.params.id;
+    let product: any;
+    const files = req.files;
+    console.log(files);
+    product = await Product.findOne({
+      attributes: ["productid"],
+      where: { Productid: req.params.id },
+      include: [
+        { model: Productimage, attributes: ["imageid", "url"] },
+        { model: Review },
+      ],
+    });
+
+    if (!product) {
+      return res.status(404).json({
+        status: false,
+        msg: "not found",
+      });
+    }
+    let updatedproduct: any;
+    if (product) {
+      updatedproduct = await Product.update(req.body, {
+        where: { productid: id },
+      });
+      product = await Product.findOne({
+        where: { Productid: req.params.id },
+        include: [
+          { model: Productimage, attributes: ["imageid", "url"] },
+          { model: Review },
+        ],
+      });
+
+      const images = await Productimage.findAll({
+        attributes: ["url", "imageid"],
+        where: { productid: product.productid },
+      });
+
+      for (var i = 0; i < images.length; i++) {
+        console.log(images[i].dataValues.url);
+        var str = images[i].dataValues.url.substring(22);
+        fs.unlinkSync(str);
+
+        await Productimage.destroy({
+          where: {
+            imageid: images[i].dataValues.imageid,
+          },
+        });
+      }
+
+      if (files) {
+        const url = req.protocol + "://" + req.get("host");
+        for (let i = 0; i < files.length; i++) {
+          await Productimage.create({
+            url: url + "/images/" + files[i].filename,
+            productid: product.productid,
+          });
+        }
+      }
+    }
+
+    res.status(200).json({
+      success: true,
+      updatedproduct,
+      product: product,
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};

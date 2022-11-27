@@ -3,6 +3,8 @@ import {
   createproduct,
   getproduct,
   deleteproduct,
+  getSingleProduct,
+  updateProduct,
 } from "../controllers/productControllers";
 import { fetch_user, authorizeRoles } from "../middlewares/auth";
 import { upload } from "../middlewares/upload";
@@ -23,3 +25,14 @@ router.delete(
   deleteproduct
 );
 router.get("/admin/product/getproducts", getproduct);
+router.route("/product/getSingleProduct/:id").get(getSingleProduct);
+router
+  .route("/admin/product/updateProduct/:id")
+  .put(
+    fetch_user,
+    authorizeRoles("admin"),
+    upload.array("avatar"),
+    updateProduct
+  )
+  .delete(fetch_user, authorizeRoles("admin"), deleteproduct);
+router;
